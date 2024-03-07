@@ -1,3 +1,3 @@
 # asm_project
 Valentyna Dermenzhy
-variant 
+variant 2
