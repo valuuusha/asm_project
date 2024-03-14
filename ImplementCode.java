@@ -42,6 +42,25 @@ public class ImplementCode {
             }
         }
     }
+    public static double median(String[] binaryNumbers) {
+        double median;
+        int middle = binaryNumbers.length / 2;
+        if (binaryNumbers.length % 2 == 0) {
+            median = (Integer.parseInt(binaryNumbers[middle - 1], 2) + Integer.parseInt(binaryNumbers[middle], 2)) / 2.0;
+        } else {
+            median = Integer.parseInt(binaryNumbers[middle], 2);
+        }
+        return median;
+    }
+
+    public static double average(String[] binaryNumbers) {
+        double sum = 0;
+        for (String binaryNumber : binaryNumbers) {
+            sum += Integer.parseInt(binaryNumber, 2);
+        }
+        return sum / binaryNumbers.length;
+    }
+
 
 
     public static void main(String[] args) {
@@ -71,9 +90,8 @@ public class ImplementCode {
 
                 bubbleSort(binaryNumbers);
 
-                for (String binaryNumber : binaryNumbers) {
-                    System.out.println(binaryNumber);
-                }
+
+                System.out.println(Math.round(median(binaryNumbers)) + " " + Math.round(average(binaryNumbers)));
             }
         } catch (IOException e) {
             e.printStackTrace();
