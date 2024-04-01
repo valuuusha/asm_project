@@ -21,12 +21,12 @@ main PROC
     xor cx, cx
     xor dx, dx
 
-    call read_loop   ;читання символів
-    call to_decimal  ;конвертація символів в десяткові числа    
+    call read_loop   ;читання символів  
 main ENDP
 
 read_loop PROC
     pop returnIndex  ;зберігаємо адресу повернення для роботи зі стеком
+    mov si, offset numbers 
     read_file:
         mov ah, 3Fh
         mov bx, 0h    ; stdin handle
@@ -36,6 +36,7 @@ read_loop PROC
         or ax, ax     ; if EOF
         jz eof
 
+        mov dx, 0
         mov dl, char 
 
         cmp dl, 13          ; якщо LF
@@ -48,8 +49,7 @@ read_loop PROC
         je eof
         cmp dl, '-'         ; якщо мінус
         je negative
-        cmp digitsRead, 6
-        je read_file
+
         inc digitsRead
         sub dl, '0'
         push dx
@@ -72,15 +72,29 @@ read_loop PROC
     end_of_num:
         push digitsRead
         mov digitsRead, 0
+
+        push si
+        call numbers_to_array
+        add si, 2
+
         inc readNum
         jmp read_file
     last:
         push digitsRead
         mov digitsRead, 0
+
+        push si
+        call numbers_to_array
+        add si, 2
+
         inc readNum
         push returnIndex
         ret  
 read_loop ENDP
+
+numbers_to_array PROC
+
+numbers_to_array ENDP  
 
 end_program PROC
     xor ax, ax 
