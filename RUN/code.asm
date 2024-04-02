@@ -15,7 +15,7 @@ main PROC
     mov ax, @data
     mov ds, ax
 
-    ;ініціалізуємо регістрів значеннями нуль для подальшої роботи
+    ;ініціалізуємо регістри значеннями нуль для подальшої роботи
     xor ax, ax 
     xor bx, bx
     xor cx, cx
@@ -93,14 +93,44 @@ read_loop PROC
 read_loop ENDP
 
 numbers_to_array PROC
+    pop word ptr [returnIndexAddToArray]
+    pop word ptr [numIndex]
+    pop readNum 
+    mov word ptr [sum], 0
+    mov bx, 1
+    num_mult:
+        pop ax
+        cmp al, '-'
+        je to_negative
+        
+        mul bx
+        add word ptr [sum], ax
 
+        mov ax, bx
+        mov bx, 0Ah
+        mul bx
+        mov bx, ax
+
+        dec cx
+        jnz num_mul
+        jmp end_numbers_to_array
+
+    to_negative:
+        not word ptr [sum]
+        inc word ptr [sum]
+        jmp end_numbers_to_array
+
+    end_numbers_to_array:
+        mov bx, word ptr [numIndex]
+        mov ax, word ptr [sum]
+        
+        mov word ptr [bx], ax
+        push word ptr [returnIndexAddToArray]
+        ret
 numbers_to_array ENDP  
 
 end_program PROC
     xor ax, ax 
-    xor bx, bx
-    xor cx, cx
-    xor dx, dx
     mov ah, 4Ch 
     int 21h 
 end main
