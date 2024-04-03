@@ -95,7 +95,7 @@ read_loop ENDP
 numbers_to_array PROC
     pop word ptr [returnIndexAddToArray]
     pop word ptr [numIndex]
-    pop readNum 
+    pop cx                      ; витягуємо кількість зчитаних чисел
     mov word ptr [sum], 0
     mov bx, 1
     num_mult:
