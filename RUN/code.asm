@@ -7,7 +7,9 @@ char db  0                      ;містить зчитаний символ
 numbers dw 10000 dup(?)         ;масив наших чисел
 digitsRead dw 0                 ;кількість цифр у числі
 readNum dw 0                    ;кількість зчитаних з файлу чисел
-
+returnIndexAddToArray dw 0      ;змінна індексу для повернення для масиву
+numIndex dw 0                   ;індекс для роботи з масивом чисел
+sum dw 0                        ;сума для обчислення числа
 
 
 .code
@@ -21,11 +23,35 @@ main PROC
     xor cx, cx
     xor dx, dx
 
-    call read_loop   ;читання символів  
+    call read_loop   ; читання символів  
+    call bubbleSort  ; бульбашкове сортування
 main ENDP
 
+bubble_sort PROC
+    mov cx, readNum
+    dec cx                              ; порівняння виконується (N-1) разів
+    mov bx, 0                           ; індекс першого елемента
+    outer_loop:
+        push cx 
+        mov si, bx                      ; si починає з першого елемента масиву
+        mov cx, readNum 
+        dec cx                          ; порівняння виконується (N-1) разів в кожному проході
+        inner_loop:
+            mov ax, [numbers + si]      ; завантажуємо поточний елемент
+            cmp ax, [numbers + si + 2] 
+            jle no_swap 
+            xchg ax, [numbers + si + 2]
+            mov [numbers + si], ax
+            no_swap:
+            add si, 2 
+            loop inner_loop
+        pop cx 
+        loop outer_loop
+    ret
+bubble_sort ENDP
+
 read_loop PROC
-    pop returnIndex  ;зберігаємо адресу повернення для роботи зі стеком
+    pop returnIndex   ;зберігаємо адресу повернення для роботи зі стеком
     mov si, offset numbers 
     read_file:
         mov ah, 3Fh
