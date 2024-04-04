@@ -25,6 +25,7 @@ main PROC
 
     call read_loop   ; читання символів  
     call bubbleSort  ; бульбашкове сортування
+    call find_median ; знаходження медіани
 main ENDP
 
 bubble_sort PROC
@@ -153,7 +154,44 @@ numbers_to_array PROC
         mov word ptr [bx], ax
         push word ptr [returnIndexAddToArray]
         ret
-numbers_to_array ENDP  
+numbers_to_array ENDP 
+
+find_median PROC
+    pop returnIndex                     
+    push word ptr [readNum]
+    push offset numbers
+
+    mov digitsRead, 0
+    pop word ptr [medianIndexReturn]
+    pop si
+    pop cx
+    xor ax, ax
+    xor dx, dx
+
+    mov dx, word ptr [readNum]
+    and dx, 1           ; побітове порівняння - парне чи непарне?
+    je even_length
+    shr cx, 1
+    shl cx, 1
+    add si, cx
+    mov ax, word ptr [si]
+    jmp end_find_median
+
+even_num:
+    shr cx, 1
+    shl cx, 1
+    add si, cx          ; знаходимо середину масиву
+    add ax, word ptr [si]
+    sub si, 2
+    add ax, word ptr [si]
+    shr ax, 1           ; зсув вправо для ділення двух чисел на 2
+    jmp end_find_median
+
+end_find_median:
+    push ax
+    push word ptr [medianIndexReturn]
+    ret
+find_median ENDP
 
 end_program PROC
     xor ax, ax 
